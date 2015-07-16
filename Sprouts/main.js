@@ -15,6 +15,8 @@ function Node(x, y)
 	this.xPos = x;
 	this.yPos = y;
 
+	this.connections = 0;   // the number of lines connected to the node (must not exceed 3)
+
 	context.beginPath();
 	context.arc(this.xPos, this.yPos, radius, 0, Math.PI*2);
 	context.fillStyle = "skyblue";
@@ -28,6 +30,14 @@ function Node(x, y)
 		context.fill();
 	}
 
+	this.activateDouble = function()
+	{
+		context.beginPath();
+		context.arc(this.xPos, this.yPos, radius, 0, Math.PI*2);
+		context.fillStyle = "orange";
+		context.fill();
+	}
+
 	this.deactivate = function()
 	{
 		context.beginPath();
@@ -35,5 +45,4 @@ function Node(x, y)
 		context.fillStyle = "skyblue";
 		context.fill();
 	}
-	
 }
