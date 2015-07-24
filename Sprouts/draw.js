@@ -1,118 +1,136 @@
 var drawing = false;
 var curving = false;
 
-var node1, node2;
+var sprout1, sprout2;
 
 function click(e)
 {
 	console.log("CLICK");
 
-	// select first node
+	// SELECT FIRST SPROUT 
 	if (!drawing && !curving)
 	{
-		// check to see if player clicked on a node
-		for (var i = 0; i < nodes.length; i++)
+		// check to see if player clicked on a sprout
+		for (var i = 0; i < sprouts.length; i++)
 		{
-			// if click is within the radius of nodes[i] and if nodes[i] doesn't have more than 3 connections
-			if ((e.clientX <= (nodes[i].xPos+(radius/2))) && 
-				(e.clientX >= (nodes[i].xPos-(radius/2))) && 
-				(e.clientY <= (nodes[i].yPos+(radius/2))) && 
-				(e.clientY >= (nodes[i].yPos-(radius/2))) &&
-				(nodes[i].connections < 3))
+			// if click is within the radius of sprouts[i] and if sprouts[i] doesn't have more than 3 connections
+			if ((e.clientX <= (sprouts[i].xPos+(radius/2))) && 
+				(e.clientX >= (sprouts[i].xPos-(radius/2))) && 
+				(e.clientY <= (sprouts[i].yPos+(radius/2))) && 
+				(e.clientY >= (sprouts[i].yPos-(radius/2))) &&
+				(sprouts[i].connections < 3))
 			{
 				drawing = true;
 
-				nodes[i].connections += 1;
-				nodes[i].activate();
-				node1 = nodes[i];
+				sprouts[i].connections += 1;
+				sprouts[i].activate();
+				sprout1 = sprouts[i];
 
 				console.log("DRAWING");
 			}
 		}
 	}
 
-	// select second node
+	// SELECT SECOND SPROUT
 	else if (drawing && !curving)
 	{
-		// check to see if player clicked on a node
-		for (var i = 0; i < nodes.length; i++)
+		// check to see if player clicked on a sprout
+		for (var i = 0; i < sprouts.length; i++)
 		{
-			// if click is within the radius of nodes[i] and if nodes[i] doesn't have more than 3 connections
-			if ((e.clientX <= (nodes[i].xPos+(radius/2))) && 
-				(e.clientX >= (nodes[i].xPos-(radius/2))) && 
-				(e.clientY <= (nodes[i].yPos+(radius/2))) && 
-				(e.clientY >= (nodes[i].yPos-(radius/2))) &&
-				(nodes[i].connections < 3))
+			// if click is within the radius of sprouts[i] and if sprouts[i] doesn't have more than 3 connections
+			if ((e.clientX <= (sprouts[i].xPos+(radius/2))) && 
+				(e.clientX >= (sprouts[i].xPos-(radius/2))) && 
+				(e.clientY <= (sprouts[i].yPos+(radius/2))) && 
+				(e.clientY >= (sprouts[i].yPos-(radius/2))) &&
+				(sprouts[i].connections < 3))
 			{
 				curving = true;
 
-				nodes[i].connections += 1;
+				sprouts[i].connections += 1;
 
-				if (nodes[i] === node1)
+				if (sprouts[i] === sprout1)
 				{
-					nodes[i].activateDouble();
+					sprouts[i].activateDouble();
 				}
 
 				else
 				{
-					nodes[i].activate();
+					sprouts[i].activate();
 				}
 
-				node2 = nodes[i];
+				sprout2 = sprouts[i];
 
 				console.log("CURVING");
 			}
 		}
 	}
 
-	// draw line and new node
+	// DRAW LINE AND NEW SPROUT
 	else if (drawing && curving)
 	{
 		drawing = false;
 		curving = false;
 
-		if (node1 === node2)
+		// DRAW A LOOP
+		if (sprout1 === sprout2)
 		{
 			// create new line
-			var xCenter = (node1.xPos + e.clientX)/2;
-			var yCenter = (node1.yPos + e.clientY)/2;
-			var arcRadius = Math.sqrt(Math.pow(node1.xPos-e.clientX, 2)+Math.pow(node1.yPos-e.clientY, 2))/2;
-			var angle = Math.atan(node1.yPos/node1.xPos);
+			var xCenter = (sprout1.xPos + e.clientX)/2;
+			var yCenter = (sprout1.yPos + e.clientY)/2;
+			var arcRadius = Math.sqrt(Math.pow(sprout1.xPos-e.clientX, 2)+Math.pow(sprout1.yPos-e.clientY, 2))/2;
+			var angle = Math.atan(sprout1.yPos/sprout1.xPos);
 
-			console.log(xCenter, yCenter, "radius", arcRadius, "angle", angle);
+			//console.log(xCenter, yCenter, "radius", arcRadius, "angle", angle);
 
 			context.beginPath();
 			context.arc(xCenter, yCenter, arcRadius, angle, angle+(Math.PI*2));
 			context.stroke();
 
-			// create new node
-			var newNode = new Node(e.clientX, e.clientY);
+			// create new sprout
+			var newSprout = new Sprout(e.clientX, e.clientY);
 		}
 
+		// DRAW A LINE
 		else
 		{
 			// create new line
 			context.beginPath();
-			context.moveTo(node1.xPos, node1.yPos);		
-			context.quadraticCurveTo(e.clientX, e.clientY, node2.xPos, node2.yPos);
+			context.moveTo(sprout1.xPos, sprout1.yPos);		
+			context.quadraticCurveTo(e.clientX, e.clientY, sprout2.xPos, sprout2.yPos);
 			context.stroke();
 
-			// create new node
+			// create new sprout
 			var m = 0.5;																	// midpoint value
-			var xPoint = (1-m)*(1-m)*node1.xPos + 2*(1-m)*m*e.clientX + m*m*node2.xPos;		// midpoint of curve
-			var yPoint = (1-m)*(1-m)*node1.yPos + 2*(1-m)*m*e.clientY + m*m*node2.yPos;		// midpoint of curve
-			var newNode = new Node(xPoint, yPoint);
+			var xPoint = (1-m)*(1-m)*sprout1.xPos + 2*(1-m)*m*e.clientX + m*m*sprout2.xPos;		// midpoint of curve
+			var yPoint = (1-m)*(1-m)*sprout1.yPos + 2*(1-m)*m*e.clientY + m*m*sprout2.yPos;		// midpoint of curve
+			var newSprout = new Sprout(xPoint, yPoint);
 		}
 
-		newNode.connections = 2;
-		nodes.push(newNode);
+		newSprout.connections = 2;
+		sprouts.push(newSprout);
 
-		//console.log(node1.xPos, node1.yPos, newNode.xPos, newNode.yPos, node2.xPos, node2.yPos);
+		//console.log(sprout1.xPos, sprout1.yPos, newSprout.xPos, newSprout.yPos, sprout2.xPos, sprout2.yPos);
 
-		node1.deactivate();
-		node2.deactivate();
+		if (sprout1.connections >= 3)
+		{	
+			sprout1.die();
+		}
+
+		else sprout1.deactivate();
+
+		if (sprout2.connections >= 3)
+		{
+			sprout2.die();
+		}
+
+		else sprout2.deactivate();
+
+		currentPlayer = player2;
 
 		console.log("DONE");
+		console.log(currentPlayer);
+
+		aiMove();
 	}
 }
 

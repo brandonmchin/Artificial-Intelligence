@@ -4,45 +4,24 @@ var context = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-var nodes = [];
+var sprouts = [];
 var radius = 16;
 
 context.lineWidth = radius;
 context.strokeStyle = "grey";
 
-function Node(x, y)
+var player1 = "player 1"; 
+var player2 = "player 2";
+var currentPlayer = player1;		// player 1 goes first
+
+function initialize()
 {
-	this.xPos = x;
-	this.yPos = y;
+	var initialSprouts = 2;
 
-	this.connections = 0;   // the number of lines connected to the node (must not exceed 3)
-
-	context.beginPath();
-	context.arc(this.xPos, this.yPos, radius, 0, Math.PI*2);
-	context.fillStyle = "skyblue";
-	context.fill();
-
-	this.activate = function()
+	// draw initial sprouts
+	for (var i = 0; i < initialSprouts; i++)
 	{
-		context.beginPath();
-		context.arc(this.xPos, this.yPos, radius, 0, Math.PI*2);
-		context.fillStyle = "red";
-		context.fill();
-	}
-
-	this.activateDouble = function()
-	{
-		context.beginPath();
-		context.arc(this.xPos, this.yPos, radius, 0, Math.PI*2);
-		context.fillStyle = "orange";
-		context.fill();
-	}
-
-	this.deactivate = function()
-	{
-		context.beginPath();
-		context.arc(this.xPos, this.yPos, radius, 0, Math.PI*2);
-		context.fillStyle = "skyblue";
-		context.fill();
+		var sprout = new Sprout(window.innerWidth/2, 250*(i+1));
+		sprouts.push(sprout);
 	}
 }
