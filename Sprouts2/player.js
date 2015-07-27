@@ -74,7 +74,7 @@ function click(e)
 		// drawing a loop
 		if (sprout1 === sprout2)
 		{
-			drawLoop(sprout1);
+			var drawn = drawLoop(sprout1);
 			sprout1.deactivate();
 			sprout2.deactivate();
 		}
@@ -82,7 +82,7 @@ function click(e)
 		// drawing a line
 		else
 		{
-			drawLine(sprout1, sprout2, e);
+			var drawn = drawLine(sprout1, sprout2, e.clientX);
 			sprout1.deactivate();
 			sprout2.deactivate();
 		}
@@ -107,6 +107,6 @@ function click(e)
 
 		currentPlayer = player2;
 
-		aiMove();
+		aiMove(drawn);
 	}
 }
